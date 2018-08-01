@@ -20,10 +20,10 @@ public class UploadSVNPlugin implements Plugin<Project> {
         String localPath = project.getProperties().get("LocalPath")
         //输出到指定路径
         project.android.applicationVariants.all { variant ->
-            variant.outputs.each { output ->
+            variant.outputs.all { output ->
                 if (variant.buildType.name.equals('debug')) {
 
-                    if (outputFileName != null && outputFileName.name.endsWith('.apk')){
+                    if (outputFileName != null && outputFileName.endsWith('.apk')){
                         outputFileName = projectName+"-${variant.buildType.name}-${getSvnRevision(project)}.apk";
                         delAllFile(localPath)
                         System.out.println("apk's location is" + outputFileName)

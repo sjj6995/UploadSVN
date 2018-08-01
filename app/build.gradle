@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-
+//apply plugin: 'com.autozi.gradlesvn' //上传svn
 android {
     compileSdkVersion 27
     defaultConfig {
