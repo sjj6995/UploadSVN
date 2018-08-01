@@ -1,0 +1,30 @@
+apply plugin: 'groovy'
+apply plugin: 'maven'
+apply from: '../bintray.gradle'
+
+dependencies {
+    compile 'com.android.tools.build:gradle:2.2.0'
+
+    compile group: 'org.tmatesoft.svnkit', name: 'svnkit', version: '1.8.11'
+    //gradle sdk
+    compile gradleApi()
+    //groovy sdk
+    compile localGroovy()
+}
+
+ //代码仓库
+repositories{
+    jcenter()
+    mavenCentral()
+}
+
+group = 'com.autozi.autozi'
+version = '0.0.2'
+
+//uploadArchives {
+//    repositories {
+//        mavenDeployer {
+//            repository(url: uri('../repo'))
+//        }
+//    }
+//}
