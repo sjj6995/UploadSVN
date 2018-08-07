@@ -1,7 +1,9 @@
 package com.path.uploadsvn
 
 import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
+import org.gradle.internal.impldep.org.apache.http.util.TextUtils
 import org.tmatesoft.svn.core.SVNDepth
 import org.tmatesoft.svn.core.SVNURL
 import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl
@@ -12,7 +14,7 @@ import org.tmatesoft.svn.core.wc.SVNCommitClient
 import org.tmatesoft.svn.core.wc.SVNWCUtil
 
 public class UploadSVN extends DefaultTask {
-
+    private String localPath;
     UploadSVN() {
         super()
         dependsOn 'assembleDebug'
@@ -27,8 +29,9 @@ public class UploadSVN extends DefaultTask {
         if (!project.hasProperty("PassWord")) {
             throw new RuntimeException("you should set PassWord in main module's gradle.properties")
         }
-        if (!project.hasProperty("LocalPath")) {
-            throw new RuntimeException("you should set LocalPath in main module's gradle.properties")
+        if (localPath == null||localPath.equals("")) {
+            System.out.println("localPath: "+localPath)
+            throw new RuntimeException("Please add flavaor svn{} in main module's build.gradle")
         }
 
         if (!project.hasProperty("SvnPath")) {
@@ -37,8 +40,11 @@ public class UploadSVN extends DefaultTask {
 
         String userName = project.getProperties().get("UserName")
         String passWord = project.getProperties().get("PassWord")
-        String localPath = project.getProperties().get("LocalPath")
         String svnPath = project.getProperties().get("SvnPath")
+
+        System.out.println("apk路径："+localPath);
+        deleteJsonFile(localPath)
+
         SVNRepositoryFactoryImpl.setup();
         ISVNOptions options = SVNWCUtil.createDefaultOptions(true);
         SVNClientManager ourClientManager = SVNClientManager.newInstance(
@@ -59,5 +65,30 @@ public class UploadSVN extends DefaultTask {
         System.out.println("apk upload to svn successfully!")
     }
 
+    private void deleteJsonFile(String path){
+        File file = new File(path)
+        File temp = null ;
+        for (int i = 0; i < file.list().length; i++) {
+            if (path.endsWith(File.separator)) {
+                temp = new File(path + file.list()[i]);
+            } else {
+                temp = new File(path + File.separator + file.list()[i]);
+            }
+            if (!file.list()[i].endsWith(".apk")){
+                if (temp.isFile()) {
+                    temp.delete();
+                }
+            }
+        }
+    }
 
+
+    public void setLocalPath(String path){
+        System.out.println("path: "+path)
+        this.localPath = path
+    }
+    @Input
+    public String getLocalPath(){
+        return localPath;
+    }
 }

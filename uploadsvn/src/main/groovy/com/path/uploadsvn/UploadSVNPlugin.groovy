@@ -8,25 +8,26 @@ public class UploadSVNPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
-        project.getTasks().create("uploadsvn", UploadSVN.class)
-
-        if (!project.hasProperty("LocalPath")) {
-            throw new RuntimeException("you should set LocalPath in main module's gradle.properties")
-        }
+        UploadSVN uploadTask = project.getTasks().create("uploadsvn", UploadSVN.class)
         def projectName = "Autozi"
         if (project.hasProperty("ProjectName")) {
             projectName = project.getProperties().get("ProjectName");
         }
-        String localPath = project.getProperties().get("LocalPath")
+        delAllFile(project.rootDir.absolutePath + "/apks")
         //输出到指定路径
         project.android.applicationVariants.all { variant ->
             variant.outputs.all { output ->
                 if (variant.buildType.name.equals('debug')) {
-
-                    if (outputFileName != null && outputFileName.endsWith('.apk')){
-                        outputFileName = projectName+"-${variant.buildType.name}-${getSvnRevision(project)}.apk";
-                        delAllFile(localPath)
-                        System.out.println("apk's location is" + outputFileName)
+                    if (outputFileName != null && outputFileName.endsWith('.apk')) {
+                        def flavor = variant.productFlavors[0]
+                        System.out.println("flavor is "+flavor.name)
+                        if (flavor.name.equals("svn")) {
+                            variant.getPackageApplication().outputDirectory = new File(project.rootDir.absolutePath + "/apks")
+                            outputFileName = projectName + "-${variant.buildType.name}-${getSvnRevision(project)}.apk";
+                            System.out.println("apk's outputFileName is " +output.outputFile.parentFile.absolutePath + outputFileName)
+                            uploadTask.setLocalPath(output.outputFile.parentFile.absolutePath)
+                        }
+                        System.out.println("apk's location is " + output.outputFile.parentFile.absolutePath + java.io.File.separator + outputFileName)
                     }
 //
 //                    def outputFile = output.outputFile
