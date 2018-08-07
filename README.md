@@ -18,12 +18,12 @@ apply plugin: 'com.autozi.gradlesvn'
 版本0.0.3:
 -----
 更新内容及变化：<br>
-删除LocalPath属性<br>
-在主module中添加flavor:<br>
+在gradle.properties中删除LocalPath属性<br>
+在主module的build.gradle中添加flavor:<br>
 ```
   productFlavors {
+        ...
         svn{
-
         }
     }
 ```
