@@ -4,11 +4,11 @@
 -----
 在gradle.properties中添加属性<br>
 ```
-LocalPath= apk生成路径<br>
-SvnPath= 上传apk的svn路径<br>
-UserName = svn用户账号<br>
-PassWord = svn用户密码<br>
-ProjectName = apk文件名字前缀，如Project = Demo apk文件名字为 Demo-debug-<svnRevision><br>
+LocalPath= apk生成路径
+SvnPath= 上传apk的svn路径
+UserName = svn用户账号
+PassWord = svn用户密码
+ProjectName = apk文件名字前缀，如Project = Demo apk文件名字为 Demo-debug-<svnRevision>
 ```
 在Project中build.gradle中添加：<br>
 ```
