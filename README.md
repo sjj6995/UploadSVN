@@ -41,6 +41,10 @@ Gradle:
         classpath 'com.autozi.autozi:uploadsvn:0.0.2'
     }
 ```
+打包Task：
+```
+./gradlew uploadsvn
+```
 特别提醒:
 -----
 com.android.tools.build:gradle:xx ，如果xx小于3.0的话请使用0.0.2版本，大于等于3.0使用0.0.3版本
