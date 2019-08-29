@@ -1,1 +1,1 @@
-include ':app', ':uploadsvn'
+include ':app', ':uploadsvn', ':publishswitch'
